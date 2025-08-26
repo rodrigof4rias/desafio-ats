@@ -1,23 +1,23 @@
 export enum StatusOptions {
-  ABERTA = 'Aberta',
-  FECHADA = 'Fechada'
+  OPEN = 'Aberta',
+  CLOSED = 'Fechada'
 }
 
-export enum ModalidadeOptions {
+export enum workModeOptions {
   REMOTO = 'Remoto',
-  HIBRIDO = 'Híbrido',
-  PRESENCIAL = 'Presencial'
+  HYBRID = 'Híbrido',
+  ONSITE = 'Presencial'
 }
 
-export enum tipoContratoOptions {
+export enum contractTypeOptions {
   CLT = 'CLT',
-  PJ = 'PJ',
+  CONTRACTOR = 'PJ',
   FREELANCER = 'Freelancer'
 }
 
-export enum nivelSenioridadeOptions {
+export enum seniorityLevelOptions {
   JUNIOR = 'Júnior',
-  PLENO = 'Pleno',
+  MID = 'Pleno',
   SENIOR = 'Sênior'
 }
 

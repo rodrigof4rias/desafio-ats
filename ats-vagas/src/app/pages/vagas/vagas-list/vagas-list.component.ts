@@ -1,38 +1,81 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
-import { PoPageModule, PoTableModule, PoTableColumn, PoPageAction, PoTableAction } from '@po-ui/ng-components';
-
+import { PoPageModule, PoTableModule, PoTableColumn, PoPageAction, PoTableAction, PoDialogService, PoNotificationService, PoLoadingModule, PoPageFilter } from '@po-ui/ng-components';
 import { VagaService, Vaga } from '../../../services/vaga.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-vagas-list',
   standalone: true,
-  imports: [CommonModule, PoPageModule, PoTableModule],
+  imports: [CommonModule, PoPageModule, PoTableModule, PoLoadingModule],
   templateUrl: './vagas-list.component.html',
   styleUrls: ['./vagas-list.component.scss']
 })
-
 export class VagasListComponent implements OnInit {
 
-
   vagas: Vaga[] = [];
+  filteredVagas: Vaga[] = []; // lista para os itens filtrados
   columns: PoTableColumn[] = [];
   pageActions: PoPageAction[] = [];
   tableActions: PoTableAction[] = [];
+  isLoading: boolean = false;
 
-  constructor(private vagaService: VagaService, private router: Router) {}
+  // paginação
+  private page = 1
+  private readonly pageSize = 5; // aqui mostra quantos itens por pagina, no caso 5
+  hasNextPage = true; // botão de "carregar mais"
+
+  // configurações do filtro
+  public readonly filterSettings: PoPageFilter = {
+    action: this.filterAction.bind(this),
+    placeholder: 'Buscar por cargo'
+  };
+
+  constructor(
+    private vagaService: VagaService,
+    private router: Router,
+    private dialogService: PoDialogService,
+    private notification: PoNotificationService
+  ) {}
 
   ngOnInit(): void {
     this.setupPage();
     this.loadVagas();
   }
 
+  // popular as duas listas
+  private loadVagas(): void {
+    this.page = 1;
+    this.vagas = [];
+    this.filteredVagas = [];
+    this.hasNextPage = true;
+    this.loadMoreVagas();
+  }
+
+  // Crie a função que carrega os dados
+  loadMoreVagas(): void {
+    this.isLoading = true;
+    this.vagaService.getVagas(this.page, this.pageSize).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: vagasRecebidas => {
+        this.vagas = [...this.vagas, ...vagasRecebidas]; //  novos itens à lista existente
+        this.filteredVagas = this.vagas;
+        this.hasNextPage = vagasRecebidas.length === this.pageSize; // checa se ainda há mais páginas
+        this.page++;
+      },
+      error: err => {
+        this.notification.error('Erro ao carregar as vagas.');
+        console.error(err);
+      }
+    });
+  }
+
   private setupPage(): void {
     this.columns = [
       { property: 'id', label: 'Código' },
-      { property: 'titulo', label: 'Cargo' }
+      { property: 'title', label: 'Cargo' }
     ];
 
     this.pageActions = [
@@ -45,10 +88,12 @@ export class VagasListComponent implements OnInit {
     ];
   }
 
-  private loadVagas(): void {
-    this.vagaService.getVagas().subscribe(vagas => {
-      this.vagas = vagas;
-    });
+  // função de filtro
+  private filterAction(filter: string): void {
+    const lowerCaseFilter = filter.toLowerCase();
+    this.filteredVagas = this.vagas.filter(vaga =>
+      vaga.title.toLowerCase().includes(lowerCaseFilter)
+    );
   }
 
   private navegarParaNovaVaga(): void {
@@ -60,7 +105,15 @@ export class VagasListComponent implements OnInit {
   }
 
   private excluirVaga(vaga: Vaga): void {
-    console.log('Excluir vaga:', vaga);
-    alert(`Tem certeza que deseja excluir a vaga: ${vaga.titulo}?`);
+    this.dialogService.confirm({
+      title: 'Confirmar Exclusão',
+      message: `Você tem certeza que deseja excluir a vaga "${vaga.title}"?`,
+      confirm: () => {
+        this.vagaService.deleteVaga(vaga.id).subscribe(() => {
+          this.notification.success('Vaga excluída com sucesso!');
+          this.loadVagas(); // Recarrega a lista
+        });
+      }
+    });
   }
 }

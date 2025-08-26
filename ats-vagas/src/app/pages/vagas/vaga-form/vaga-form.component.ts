@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PoFieldModule, PoPageModule, PoNotificationService } from '@po-ui/ng-components';
 import { VagaService, Vaga } from '../../../services/vaga.service';
-import { StatusOptions, ModalidadeOptions, nivelSenioridadeOptions, tipoContratoOptions } from '../../../shared/vagas.enum'
+import { StatusOptions, contractTypeOptions, seniorityLevelOptions, workModeOptions } from '../../../shared/vagas.enum'
 
 @Component({
   selector: 'app-vaga-form',
@@ -24,16 +24,16 @@ export class VagaFormComponent implements OnInit {
 
   vaga: Vaga = {
     id: 0,
-    titulo: '',
-    descricao: '',
-    empresa: '',
-    localizacao: '',
-    salario: 0,
-    status: 'ABERTA',
-    modalidade: 'PRESENCIAL',
-    tipoContrato: 'CLT',
-    nivelSenioridade: 'JUNIOR',
-    requisitos: '',
+    title: '',
+    description: '',
+    company: '',
+    location: '',
+    salary: 0,
+    status: 'OPEN',
+    workMode: 'ONSITE',
+    contractType: 'CLT',
+    seniorityLevel: 'JUNIOR',
+    requirements: '',
     createdAt: new Date(),
     updatedAt: new Date()
     };
@@ -80,7 +80,7 @@ export class VagaFormComponent implements OnInit {
   }
 
   isFormInvalid(): boolean {
-    return !this.vaga.titulo?.trim() || !this.vaga.descricao?.trim();
+    return !this.vaga.title?.trim() || !this.vaga.description?.trim();
   }
 
   statusOptions = Object.entries(StatusOptions).map(([value, label]) => ({
@@ -88,17 +88,17 @@ export class VagaFormComponent implements OnInit {
     label
   }));
 
-  modalidadeOptions = Object.entries(ModalidadeOptions).map(([value, label]) => ({
+  workModeOptions = Object.entries(workModeOptions).map(([value, label]) => ({
     value,
     label
   }));
 
-  tipoContratoOptions = Object.entries(tipoContratoOptions).map(([value, label]) => ({
+  contractTypeOptions = Object.entries(contractTypeOptions).map(([value, label]) => ({
     value,
     label
   }));
 
-  nivelSenioridadeOptions = Object.entries(nivelSenioridadeOptions).map(([value, label]) => ({
+  seniorityLevelOptions = Object.entries(seniorityLevelOptions).map(([value, label]) => ({
     value,
     label
   }));

@@ -8,7 +8,7 @@
     <po-input
       class="po-md-6"
       name="title"
-      [(ngModel)]="vaga.titulo"
+      [(ngModel)]="vaga.title"
       p-label="Cargo da Vaga"
       p-required
       p-placeholder="Ex: Desenvolvedor Angular">
@@ -19,7 +19,7 @@
     <po-textarea
       class="po-md-6"
       name="descricao"
-      [(ngModel)]="vaga.descricao"
+      [(ngModel)]="vaga.description"
       p-label="Descrição"
       [p-rows]="5"
       p-placeholder="Descreva as responsabilidades e requisitos da vaga...">
@@ -30,7 +30,7 @@
     <po-input
       class="po-md-6"
       name="empresa"
-      [(ngModel)]="vaga.empresa"
+      [(ngModel)]="vaga.company"
       p-label="Empresa">
     </po-input>
   </div>
@@ -39,13 +39,13 @@
     <po-input
       class="po-md-3"
       name="salario"
-      [(ngModel)]="vaga.salario"
+      [(ngModel)]="vaga.salary"
       p-label="Salário">
     </po-input>
     <po-input
       class="po-md-3"
       name="localizacao"
-      [(ngModel)]="vaga.localizacao"
+      [(ngModel)]="vaga.location"
       p-label="Localização">
     </po-input>
   </div>
@@ -60,7 +60,7 @@
     <po-combo
       class="po-md-3"
       name="modalidade"
-      [p-options]="modalidadeOptions"
+      [p-options]="workModeOptions"
       p-label="Modalidade">
     </po-combo>
   </div>
@@ -69,13 +69,13 @@
     <po-combo
       class="po-md-3"
       name="tipoContrato"
-      [p-options]="tipoContratoOptions"
+      [p-options]="contractTypeOptions"
       p-label="Tipo de Contrato">
     </po-combo>
     <po-combo
       class="po-md-3"
       name="nivelSenioridade"
-      [p-options]="nivelSenioridadeOptions"
+      [p-options]="seniorityLevelOptions"
       p-label="Senioridade">
     </po-combo>
   </div>
