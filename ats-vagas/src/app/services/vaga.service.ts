@@ -4,41 +4,50 @@ import { Observable } from 'rxjs';
 
 export interface Vaga {
   id: number;
-  title: string;
-  description: string;
+  titulo: string;
+  descricao: string;
+  empresa: string;
+  localizacao: string;
+  salario: number | null;
+  status: 'ABERTA' | 'FECHADA';
+  modalidade: 'REMOTO' | 'HIBRIDO' | 'PRESENCIAL';
+  tipoContrato: 'CLT' | 'PJ' | 'FREELANCER';
+  nivelSenioridade: 'JUNIOR' | 'PLENO' | 'SENIOR';
+  requisitos: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class VagaService {
 
-  // API simulada pelo json-server
-  private apiUrl = 'http://localhost:3000/vagas';
+  private API = 'http://localhost:3000/vagas';
+
   constructor(private http: HttpClient) { }
 
   getVagas(): Observable<Vaga[]> {
-    return this.http.get<Vaga[]>(this.apiUrl);
+    return this.http.get<Vaga[]>(this.API);
   }
 
   getVagaById(id: number): Observable<Vaga> {
-    const url = `${this.apiUrl}/${id}`;
+    const url = `${this.API}/${id}`;
     return this.http.get<Vaga>(url);
   }
 
   saveVaga(vaga: Vaga): Observable<Vaga> {
     if (vaga.id && vaga.id !== 0) {
-      // faz uma requisição PUT
-      const url = `${this.apiUrl}/${vaga.id}`;
+      const url = `${this.API}/${vaga.id}`;
       return this.http.put<Vaga>(url, vaga);
     } else {
-      // faz uma requisição POST
-      return this.http.post<Vaga>(this.apiUrl, vaga);
+      return this.http.post<Vaga>(this.API, vaga);
     }
   }
 
   deleteVaga(id: number): Observable<{}> {
-    const url = `${this.apiUrl}/${id}`;
+    const url = `${this.API}/${id}`;
     return this.http.delete(url);
   }
 }

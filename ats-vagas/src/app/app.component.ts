@@ -24,7 +24,7 @@ import { RouterOutlet } from '@angular/router';
 export class AppComponent {
   readonly menus: Array<PoMenuItem> = [
     {label: 'Home', link: '/', icon: 'po-icon-home'},
-    {label: 'vagas', link: 'vagas', icon: 'po-icon-job'}
+    {label: 'Vagas', link: 'vagas', icon: 'po-icon-job'}
   ];
 
   private onClick() {

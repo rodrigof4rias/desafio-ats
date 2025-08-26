@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PoFieldModule, PoPageModule, PoNotificationService } from '@po-ui/ng-components';
 import { VagaService, Vaga } from '../../../services/vaga.service';
+import { StatusOptions, ModalidadeOptions, nivelSenioridadeOptions, tipoContratoOptions } from '../../../shared/vagas.enum'
 
 @Component({
   selector: 'app-vaga-form',
@@ -20,13 +21,28 @@ import { VagaService, Vaga } from '../../../services/vaga.service';
 export class VagaFormComponent implements OnInit {
 
   pageTitle: string = 'Nova Vaga';
-  vaga: Vaga = { id: 0, title: '', description: '' };
+
+  vaga: Vaga = {
+    id: 0,
+    titulo: '',
+    descricao: '',
+    empresa: '',
+    localizacao: '',
+    salario: 0,
+    status: 'ABERTA',
+    modalidade: 'PRESENCIAL',
+    tipoContrato: 'CLT',
+    nivelSenioridade: 'JUNIOR',
+    requisitos: '',
+    createdAt: new Date(),
+    updatedAt: new Date()
+    };
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private vagaService: VagaService,
-    private notification: PoNotificationService // 2. Injete o PoNotificationService aqui
+    private notification: PoNotificationService
   ) {}
 
   ngOnInit(): void {
@@ -64,6 +80,26 @@ export class VagaFormComponent implements OnInit {
   }
 
   isFormInvalid(): boolean {
-    return !this.vaga.title?.trim() || !this.vaga.description?.trim();
+    return !this.vaga.titulo?.trim() || !this.vaga.descricao?.trim();
   }
+
+  statusOptions = Object.entries(StatusOptions).map(([value, label]) => ({
+    value,
+    label
+  }));
+
+  modalidadeOptions = Object.entries(ModalidadeOptions).map(([value, label]) => ({
+    value,
+    label
+  }));
+
+  tipoContratoOptions = Object.entries(tipoContratoOptions).map(([value, label]) => ({
+    value,
+    label
+  }));
+
+  nivelSenioridadeOptions = Object.entries(nivelSenioridadeOptions).map(([value, label]) => ({
+    value,
+    label
+  }));
 }

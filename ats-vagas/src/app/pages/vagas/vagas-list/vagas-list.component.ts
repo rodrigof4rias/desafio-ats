@@ -32,7 +32,7 @@ export class VagasListComponent implements OnInit {
   private setupPage(): void {
     this.columns = [
       { property: 'id', label: 'Código' },
-      { property: 'title', label: 'Cargo' }
+      { property: 'titulo', label: 'Cargo' }
     ];
 
     this.pageActions = [
@@ -61,6 +61,6 @@ export class VagasListComponent implements OnInit {
 
   private excluirVaga(vaga: Vaga): void {
     console.log('Excluir vaga:', vaga);
-    alert(`Simulando exclusão da vaga: ${vaga.title}`);
+    alert(`Tem certeza que deseja excluir a vaga: ${vaga.titulo}?`);
   }
 }
