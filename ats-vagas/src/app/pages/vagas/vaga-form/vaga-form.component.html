@@ -1,0 +1,29 @@
+<po-page-edit
+  [p-title]="pageTitle"
+  (p-save)="save()"
+  (p-cancel)="cancel()"
+  [p-disable-submit]="isFormInvalid()">
+
+  <div class="po-row">
+    <po-input
+      class="po-md-6"
+      name="title"
+      [(ngModel)]="vaga.title"
+      p-label="Cargo da Vaga"
+      p-required
+      p-placeholder="Ex: Desenvolvedor Angular">
+    </po-input>
+  </div>
+
+  <div class="po-row">
+    <po-textarea
+      class="po-md-12"
+      name="description"
+      [(ngModel)]="vaga.description"
+      p-label="Descrição"
+      [p-rows]="5"
+      p-placeholder="Descreva as responsabilidades e requisitos da vaga...">
+    </po-textarea>
+  </div>
+
+</po-page-edit>

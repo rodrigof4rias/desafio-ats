@@ -1,0 +1,7 @@
+{
+  "vagas": [
+    { "id": 1, "title": "Desenvolvedor Angular Pleno", "description": "Trabalhar com desenvolvimento de novas features." },
+    { "id": 2, "title": "Engenheiro de Software Backend (.NET)", "description": "Manutenção e criação de APIs." },
+    { "id": 3, "title": "Product Owner", "description": "Gerenciar o backlog e priorizar tarefas." }
+  ]
+}
