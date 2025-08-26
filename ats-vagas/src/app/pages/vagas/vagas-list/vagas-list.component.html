@@ -1,11 +1,18 @@
 <po-page-list
   p-title="Cadastro de Vagas"
-  [p-actions]="pageActions">
+  [p-actions]="pageActions"
+  [p-filter]="filterSettings">
 
-  <po-table
-    [p-columns]="columns"
-    [p-items]="vagas"
-    [p-actions]="tableActions">
-  </po-table>
+  <div class="po-relative">
+    <po-table
+      [p-columns]="columns"
+      [p-items]="filteredVagas"
+      [p-actions]="tableActions"
+      (p-show-more)="loadMoreVagas.bind(this)"
+      (p-hide-load-more)="!hasNextPage">
+    </po-table>
+
+    <po-loading-overlay *ngIf="isLoading"></po-loading-overlay>
+  </div>
 
 </po-page-list>

@@ -13,12 +13,14 @@ export interface Vaga {
 })
 export class VagaService {
 
-  // API simulada pelo json-server
   private apiUrl = 'http://localhost:3000/vagas';
+
   constructor(private http: HttpClient) { }
 
-  getVagas(): Observable<Vaga[]> {
-    return this.http.get<Vaga[]>(this.apiUrl);
+  // Mantivemos apenas esta versão, que suporta paginação
+  getVagas(page: number, pageSize: number): Observable<Vaga[]> {
+    const url = `${this.apiUrl}?_page=${page}&_limit=${pageSize}`;
+    return this.http.get<Vaga[]>(url);
   }
 
   getVagaById(id: number): Observable<Vaga> {
@@ -28,11 +30,9 @@ export class VagaService {
 
   saveVaga(vaga: Vaga): Observable<Vaga> {
     if (vaga.id && vaga.id !== 0) {
-      // faz uma requisição PUT
       const url = `${this.apiUrl}/${vaga.id}`;
       return this.http.put<Vaga>(url, vaga);
     } else {
-      // faz uma requisição POST
       return this.http.post<Vaga>(this.apiUrl, vaga);
     }
   }
