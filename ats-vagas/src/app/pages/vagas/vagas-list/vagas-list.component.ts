@@ -1,37 +1,82 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { PoPageModule, PoTableModule, PoTableColumn, PoPageAction, PoTableAction, PoDialogService, PoNotificationService, PoLoadingModule, PoPageFilter } from '@po-ui/ng-components';
+import { FormsModule } from '@angular/forms';
+import {
+  PoPageModule,
+  PoTableModule,
+  PoTableColumn,
+  PoPageAction,
+  PoTableAction,
+  PoDialogService,
+  PoNotificationService,
+  PoLoadingModule,
+  PoSearchModule,
+  PoModalComponent,
+  PoModalModule,
+  PoFieldModule,
+  PoButtonModule,
+  PoSelectOption
+} from '@po-ui/ng-components';
 import { VagaService, Vaga } from '../../../services/vaga.service';
 import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-vagas-list',
   standalone: true,
-  imports: [CommonModule, PoPageModule, PoTableModule, PoLoadingModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    PoPageModule,
+    PoTableModule,
+    PoLoadingModule,
+    PoSearchModule,
+    PoModalModule,
+    PoFieldModule,
+    PoButtonModule
+  ],
   templateUrl: './vagas-list.component.html',
   styleUrls: ['./vagas-list.component.scss']
 })
 export class VagasListComponent implements OnInit {
+  @ViewChild(PoModalComponent, { static: true }) poModal!: PoModalComponent;
 
   vagas: Vaga[] = [];
-  filteredVagas: Vaga[] = []; // lista para os itens filtrados
+  filteredVagas: Vaga[] = [];
   columns: PoTableColumn[] = [];
   pageActions: PoPageAction[] = [];
   tableActions: PoTableAction[] = [];
   isLoading: boolean = false;
 
-  // paginação
-  private page = 1;
-  private readonly pageSize = 5; // aqui mostra quantos itens por pagina, no caso 5
-  hasNextPage = true; // botão de "carregar mais"
-  private currentFilter = ''; // **NOVO**: Guarda o filtro atual para ser reaplicado
+  novaVaga: Vaga = this.createBlankVaga();
 
-  // configurações do filtro
-  public readonly filterSettings: PoPageFilter = {
-    action: this.filterAction.bind(this),
-    placeholder: 'Buscar por cargo'
-  };
+  readonly statusOptions: PoSelectOption[] = [
+    { label: 'Aberta', value: 'OPEN' },
+    { label: 'Fechada', value: 'CLOSED' }
+  ];
+
+  readonly workModeOptions: PoSelectOption[] = [
+    { label: 'Remoto', value: 'REMOTE' },
+    { label: 'Híbrido', value: 'HYBRID' },
+    { label: 'Presencial', value: 'ONSITE' }
+  ];
+
+  readonly contractTypeOptions: PoSelectOption[] = [
+    { label: 'CLT', value: 'CLT' },
+    { label: 'PJ', value: 'CONTRACTOR' },
+    { label: 'Freelancer', value: 'FREELANCER' }
+  ];
+
+  readonly seniorityLevelOptions: PoSelectOption[] = [
+    { label: 'Júnior', value: 'JUNIOR' },
+    { label: 'Pleno', value: 'MID' },
+    { label: 'Sênior', value: 'SENIOR' }
+  ];
+
+  private page = 1;
+  private readonly pageSize = 5;
+  hasNextPage = true;
+  private currentFilter = '';
 
   constructor(
     private vagaService: VagaService,
@@ -45,29 +90,79 @@ export class VagasListComponent implements OnInit {
     this.loadVagas();
   }
 
-  // popular as duas listas
+  private createBlankVaga(): Vaga {
+    return {
+      id: 0,
+      title: '',
+      description: '',
+      company: '',
+      location: '',
+      salary: null,
+      status: 'OPEN',
+      workMode: 'REMOTE',
+      contractType: 'CLT',
+      seniorityLevel: 'JUNIOR',
+      requirements: '',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+  }
+
+  private setupPage(): void {
+    this.columns = [
+      { property: 'id', label: 'Código', width: '100px' },
+      { property: 'title', label: 'Cargo' }
+    ];
+    this.pageActions = [
+      { label: 'Nova Vaga', action: this.abrirModalNovaVaga.bind(this), icon: 'po-icon-plus' }
+    ];
+    this.tableActions = [
+      { label: 'Editar', action: this.editarVaga.bind(this), icon: 'po-icon-edit' },
+      { label: 'Excluir', action: this.excluirVaga.bind(this), icon: 'po-icon-delete', type: 'danger' }
+    ];
+  }
+
+  salvarVaga(): void {
+    this.isLoading = true;
+    this.vagaService.saveVaga(this.novaVaga).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: () => {
+        this.notification.success('Vaga cadastrada com sucesso!');
+        this.poModal.close();
+        this.loadVagas();
+      },
+      error: (err) => {
+        this.notification.error('Erro ao cadastrar a vaga.');
+        console.error(err);
+      }
+    });
+  }
+
+  private abrirModalNovaVaga(): void {
+    this.novaVaga = this.createBlankVaga();
+    this.poModal.open();
+  }
+
   private loadVagas(): void {
     this.page = 1;
     this.vagas = [];
-    // O filteredVagas será limpo dentro do loadMoreVagas
     this.hasNextPage = true;
     this.loadMoreVagas();
   }
 
-  // Crie a função que carrega os dados
   loadMoreVagas(): void {
     if (!this.hasNextPage || this.isLoading) {
       return;
     }
-
     this.isLoading = true;
     this.vagaService.getVagas(this.page, this.pageSize).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
       next: vagasRecebidas => {
-        this.vagas = [...this.vagas, ...vagasRecebidas]; // novos itens à lista existente
-        this.filterAction(this.currentFilter); // **MUDANÇA**: Re-aplica o filtro atual sobre a lista maior
-        this.hasNextPage = vagasRecebidas.length === this.pageSize; // checa se ainda há mais páginas
+        this.vagas = [...this.vagas, ...vagasRecebidas];
+        this.filterAction(this.currentFilter);
+        this.hasNextPage = vagasRecebidas.length === this.pageSize;
         this.page++;
       },
       error: err => {
@@ -77,30 +172,11 @@ export class VagasListComponent implements OnInit {
     });
   }
 
-  private setupPage(): void {
-    this.columns = [
-      { property: 'id', label: 'Código' },
-      { property: 'title', label: 'Cargo' }
-    ];
-    this.pageActions = [
-      { label: 'Nova Vaga', action: this.navegarParaNovaVaga.bind(this), icon: 'po-icon-plus' }
-    ];
-    this.tableActions = [
-      { label: 'Editar', action: this.editarVaga.bind(this), icon: 'po-icon-edit' },
-      { label: 'Excluir', action: this.excluirVaga.bind(this), icon: 'po-icon-delete', type: 'danger' }
-    ];
-  }
-
-  // função de filtro
-  filterAction(filter: string = ''): void { // Permite ser chamada sem parâmetro
-    this.currentFilter = filter.toLowerCase(); // Salva o filtro atual
+  filterAction(filter: string = ''): void {
+    this.currentFilter = filter.toLowerCase();
     this.filteredVagas = this.vagas.filter(vaga =>
       vaga.title.toLowerCase().includes(this.currentFilter)
     );
-  }
-
-  private navegarParaNovaVaga(): void {
-    this.router.navigate(['/vagas/novo']);
   }
 
   private editarVaga(vaga: Vaga): void {
@@ -114,7 +190,7 @@ export class VagasListComponent implements OnInit {
       confirm: () => {
         this.vagaService.deleteVaga(vaga.id).subscribe(() => {
           this.notification.success('Vaga excluída com sucesso!');
-          this.loadVagas(); // Recarrega a lista
+          this.loadVagas();
         });
       }
     });

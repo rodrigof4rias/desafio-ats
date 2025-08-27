@@ -1,18 +1,124 @@
 <po-page-list
   p-title="Cadastro de Vagas"
-  [p-actions]="pageActions"
-  [p-filter]="filterSettings"
-  (p-advanced-filter-change-model)="filterAction(('$event.target as HTMLInputElement'))" >
+  [p-actions]="pageActions">
+
+  <po-search
+    (p-change-model)="filterAction($event)"
+    p-placeholder="Buscar por cargo">
+  </po-search>
+
   <div class="po-relative">
     <po-table
       [p-columns]="columns"
       [p-items]="filteredVagas"
       [p-actions]="tableActions"
-      (p-show-more)="loadMoreVagas.bind(this)"
-      (p-hide-load-more)="!hasNextPage">
+      (p-show-more)="loadMoreVagas()"
+      [p-show-more-disabled]="!hasNextPage">
     </po-table>
-
     <po-loading-overlay *ngIf="isLoading"></po-loading-overlay>
   </div>
 
 </po-page-list>
+
+<!-- Modal -->
+<po-modal #poModal p-title="Cadastrar Nova Vaga" [p-primary-action]="{label: 'Salvar', action: salvarVaga.bind(this), disabled: !!vagaForm.invalid}" [p-secondary-action]="{label: 'Cancelar', action: poModal.close.bind(poModal)}">
+  <form #vagaForm="ngForm">
+    <div class="po-row">
+      <po-input
+        class="po-md-6"
+        name="title"
+        p-label="Cargo da Vaga"
+        [(ngModel)]="novaVaga.title"
+        [p-required]="'true'">
+      </po-input>
+
+      <po-input
+        class="po-md-6"
+        name="company"
+        p-label="Empresa"
+        [(ngModel)]="novaVaga.company"
+        [p-required]="'true'">
+      </po-input>
+    </div>
+
+    <div class="po-row">
+      <po-input
+        class="po-md-6"
+        name="location"
+        p-label="Localização"
+        [(ngModel)]="novaVaga.location"
+        [p-required]="'true'">
+      </po-input>
+
+      <po-number
+        class="po-md-6"
+        name="salary"
+        p-label="Salário (opcional)"
+        [(ngModel)]="novaVaga.salary">
+      </po-number>
+    </div>
+
+    <div class="po-row">
+      <po-select
+        class="po-md-6"
+        name="workMode"
+        p-label="Modalidade"
+        [ngModel]="novaVaga.workMode"
+        (ngModelChange)="novaVaga.workMode = $event"
+        [p-options]="workModeOptions">
+      </po-select>
+
+      <po-select
+        class="po-md-6"
+        name="contractType"
+        p-label="Tipo de Contrato"
+        [ngModel]="novaVaga.contractType"
+        (ngModelChange)="novaVaga.contractType = $event"
+        [p-options]="contractTypeOptions">
+      </po-select>
+    </div>
+
+    <div class="po-row">
+      <po-select
+        class="po-md-6"
+        name="seniorityLevel"
+        p-label="Nível de Senioridade"
+        [ngModel]="novaVaga.seniorityLevel"
+        (ngModelChange)="novaVaga.seniorityLevel = $event"
+        [p-options]="seniorityLevelOptions">
+      </po-select>
+
+      <po-select
+        class="po-md-6"
+        name="status"
+        p-label="Status da Vaga"
+        [ngModel]="novaVaga.status"
+        (ngModelChange)="novaVaga.status = $event"
+        [p-options]="statusOptions">
+      </po-select>
+    </div>
+
+    <div class="po-row">
+      <po-textarea
+        class="po-md-12"
+        name="description"
+        p-label="Descrição da Vaga"
+        [(ngModel)]="novaVaga.description"
+        [p-required]="true"
+        [p-rows]="3">
+      </po-textarea>
+    </div>
+
+    <div class="po-row">
+      <po-textarea
+        class="po-md-12"
+        name="requirements"
+        p-label="Requisitos"
+        [(ngModel)]="novaVaga.requirements"
+        [p-required]="true"
+        [p-rows]="3">
+      </po-textarea>
+    </div>
+  </form>
+</po-modal>
+
