@@ -22,9 +22,10 @@ export class VagasListComponent implements OnInit {
   isLoading: boolean = false;
 
   // paginação
-  private page = 1
+  private page = 1;
   private readonly pageSize = 5; // aqui mostra quantos itens por pagina, no caso 5
   hasNextPage = true; // botão de "carregar mais"
+  private currentFilter = ''; // **NOVO**: Guarda o filtro atual para ser reaplicado
 
   // configurações do filtro
   public readonly filterSettings: PoPageFilter = {
@@ -48,20 +49,24 @@ export class VagasListComponent implements OnInit {
   private loadVagas(): void {
     this.page = 1;
     this.vagas = [];
-    this.filteredVagas = [];
+    // O filteredVagas será limpo dentro do loadMoreVagas
     this.hasNextPage = true;
     this.loadMoreVagas();
   }
 
   // Crie a função que carrega os dados
   loadMoreVagas(): void {
+    if (!this.hasNextPage || this.isLoading) {
+      return;
+    }
+
     this.isLoading = true;
     this.vagaService.getVagas(this.page, this.pageSize).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
       next: vagasRecebidas => {
-        this.vagas = [...this.vagas, ...vagasRecebidas]; //  novos itens à lista existente
-        this.filteredVagas = this.vagas;
+        this.vagas = [...this.vagas, ...vagasRecebidas]; // novos itens à lista existente
+        this.filterAction(this.currentFilter); // **MUDANÇA**: Re-aplica o filtro atual sobre a lista maior
         this.hasNextPage = vagasRecebidas.length === this.pageSize; // checa se ainda há mais páginas
         this.page++;
       },
@@ -77,11 +82,9 @@ export class VagasListComponent implements OnInit {
       { property: 'id', label: 'Código' },
       { property: 'title', label: 'Cargo' }
     ];
-
     this.pageActions = [
       { label: 'Nova Vaga', action: this.navegarParaNovaVaga.bind(this), icon: 'po-icon-plus' }
     ];
-
     this.tableActions = [
       { label: 'Editar', action: this.editarVaga.bind(this), icon: 'po-icon-edit' },
       { label: 'Excluir', action: this.excluirVaga.bind(this), icon: 'po-icon-delete', type: 'danger' }
@@ -89,10 +92,10 @@ export class VagasListComponent implements OnInit {
   }
 
   // função de filtro
-  private filterAction(filter: string): void {
-    const lowerCaseFilter = filter.toLowerCase();
+  filterAction(filter: string = ''): void { // Permite ser chamada sem parâmetro
+    this.currentFilter = filter.toLowerCase(); // Salva o filtro atual
     this.filteredVagas = this.vagas.filter(vaga =>
-      vaga.title.toLowerCase().includes(lowerCaseFilter)
+      vaga.title.toLowerCase().includes(this.currentFilter)
     );
   }
 

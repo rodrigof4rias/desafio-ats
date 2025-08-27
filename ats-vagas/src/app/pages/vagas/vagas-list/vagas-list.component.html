@@ -1,8 +1,8 @@
 <po-page-list
   p-title="Cadastro de Vagas"
   [p-actions]="pageActions"
-  [p-filter]="filterSettings">
-
+  [p-filter]="filterSettings"
+  (p-advanced-filter-change-model)="filterAction(('$event.target as HTMLInputElement'))" >
   <div class="po-relative">
     <po-table
       [p-columns]="columns"
