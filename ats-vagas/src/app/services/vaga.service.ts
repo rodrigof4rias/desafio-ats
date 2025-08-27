@@ -6,11 +6,23 @@ export interface Vaga {
   id: number;
   title: string;
   description: string;
+  company: string;
+  location: string;
+  salary: number | null;
+  status: 'OPEN' | 'CLOSED';
+  workMode: 'REMOTE' | 'HYBRID' | 'ONSITE';
+  contractType: 'CLT' | 'CONTRACTOR' | 'FREELANCER';
+  seniorityLevel: 'JUNIOR' | 'MID' | 'SENIOR';
+  requirements: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
+
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class VagaService {
 
   private apiUrl = 'http://localhost:3000/vagas';
