@@ -25,6 +25,7 @@ export interface Vaga {
 export class VagaService {
 
   private apiUrl = 'http://localhost:3000/vagas';
+  createVaga: any;
 
   constructor(private http: HttpClient) { }
 

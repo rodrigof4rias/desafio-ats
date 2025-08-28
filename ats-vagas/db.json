@@ -16,24 +16,49 @@
       "description": "Gerenciar o backlog e priorizar tarefas."
     },
     {
-      "id": 0,
-      "title": "teste",
-      "description": "asdasdad"
-    },
-    {
-      "id": 0,
+      "id": "0",
       "title": "Vendedor de kisuco",
       "description": "asdasd"
     },
     {
-      "id": 0,
+      "id": "0",
       "title": "Diz que trabalha",
       "description": "asdas"
     },
     {
-      "id": 0,
+      "id": "0",
       "title": "doidinho de bairro",
       "description": "asasd"
+    },
+    {
+      "id": 0,
+      "title": "teste",
+      "description": "asdasd",
+      "company": "asdasd",
+      "location": "asdasd",
+      "salary": 15000,
+      "status": "OPEN",
+      "workMode": "REMOTE",
+      "contractType": "CLT",
+      "seniorityLevel": "JUNIOR",
+      "requirements": "asdada",
+      "createdAt": "2025-08-27T20:24:34.634Z",
+      "updatedAt": "2025-08-27T20:24:34.634Z"
+    },
+    {
+      "id": 0,
+      "title": "teste 2",
+      "description": "asad",
+      "company": "adaads",
+      "location": "sasd",
+      "salary": 1123,
+      "status": "OPEN",
+      "workMode": "REMOTE",
+      "contractType": "CONTRACTOR",
+      "seniorityLevel": "JUNIOR",
+      "requirements": "asdasd",
+      "createdAt": "2025-08-27T20:25:16.301Z",
+      "updatedAt": "2025-08-27T20:25:16.301Z"
     }
   ]
 }
