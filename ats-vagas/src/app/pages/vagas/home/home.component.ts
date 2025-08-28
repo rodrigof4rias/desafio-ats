@@ -13,8 +13,15 @@ import { PoPageModule, PoWidgetModule, PoButtonModule } from '@po-ui/ng-componen
 export class HomeComponent {
   constructor(private router: Router) {}
 
-  // Função para navegar para a página de vagas
+  // navegar para a página de vagas
   navigateToVagas() {
     this.router.navigate(['/vagas']);
   }
+
+  // Navega para a página de relatórios
+  navigateToRelatorios() {
+    this.router.navigate(['/relatorios']);
+  }
 }
+
+

@@ -11,6 +11,7 @@
   </div>
 
   <div class="po-row">
+    <!-- Widget para Vagas -->
     <div class="po-md-6 po-lg-4 po-offset-lg-2">
       <po-widget class="po-text-center">
         <div class="po-font-title">Cadastro de Vagas</div>
@@ -21,13 +22,15 @@
       </po-widget>
     </div>
 
+    <!-- Widget para Relatórios -->
     <div class="po-md-6 po-lg-4">
        <po-widget class="po-text-center">
         <div class="po-font-title">Relatórios</div>
         <p class="po-mt-2 po-mb-3">
-          Em breve, você poderá visualizar relatórios e dashboards sobre suas vagas.
+          Visualize relatórios e dashboards sobre o status e a distribuição das suas vagas.
         </p>
-        <po-button p-label="Ver Relatórios" [p-disabled]="true"></po-button>
+        <!--  -->
+        <po-button p-label="Ver Relatórios" (p-click)="navigateToRelatorios()"></po-button>
       </po-widget>
     </div>
   </div>
