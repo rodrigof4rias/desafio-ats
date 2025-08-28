@@ -25,6 +25,9 @@ export class AppComponent {
   readonly menus: Array<PoMenuItem> = [
     {label: 'Home', link: '/', icon: 'po-icon-home'},
     {label: 'Vagas', link: 'vagas', icon: 'po-icon-job'},
+    {label: 'Portal do Candidato', icon: 'po-icon-job'},
+    {label: 'Área CIEE', icon: 'po-icon-job'},
+    {label: 'Cursos profissionalizantes', icon: 'po-icon-job'},
     {label: 'Relatórios', link: 'relatorios', icon: 'po-icon-chart' }
   ];
 

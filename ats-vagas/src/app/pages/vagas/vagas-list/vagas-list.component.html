@@ -12,12 +12,11 @@
       [p-columns]="columns"
       [p-items]="filteredVagas"
       [p-actions]="tableActions"
-      (p-show-more)="loadMoreVagas()"
-      [p-show-more-disabled]="!hasNextPage">
+      (p-show-more)="loadMoreVagas()">
     </po-table>
     <po-loading-overlay *ngIf="isLoading"></po-loading-overlay>
-  </div>
 
+  </div>
 </po-page-list>
 
 <!-- Modal -->
@@ -53,8 +52,10 @@
       <po-number
         class="po-md-6"
         name="salary"
-        p-label="Salário (opcional)"
-        [(ngModel)]="novaVaga.salary">
+        p-label="Salário"
+        [(ngModel)]="novaVaga.salary"
+        p-min-value="0"
+        p-clean>
       </po-number>
     </div>
 
