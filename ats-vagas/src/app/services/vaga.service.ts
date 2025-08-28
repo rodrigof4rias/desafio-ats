@@ -47,6 +47,10 @@ export class VagaService {
     return this.http.get<Vaga[]>(url);
   }
 
+  getAllVagas(): Observable<Vaga[]> {
+    return this.http.get<Vaga[]>(this.apiUrl);
+  }
+
   saveVaga(vaga: Vaga) {
   const { id, createdAt, updatedAt, ...rest } = vaga as any;
   const payload = { ...rest, salary: this.toNumberBR(rest.salary) };

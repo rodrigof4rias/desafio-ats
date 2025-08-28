@@ -52,8 +52,10 @@
       <po-number
         class="po-md-6"
         name="salary"
-        p-label="Salário (opcional)"
-        [(ngModel)]="novaVaga.salary">
+        p-label="Salário"
+        [(ngModel)]="novaVaga.salary"
+        p-min-value="0"
+        p-clean>
       </po-number>
     </div>
 
