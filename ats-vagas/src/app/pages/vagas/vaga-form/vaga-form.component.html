@@ -31,7 +31,8 @@
       class="po-md-6"
       name="empresa"
       [(ngModel)]="vaga.company"
-      p-label="Empresa">
+      p-label="Empresa"
+      p-placeholder="Escreva aqui o nome da empresa">
     </po-input>
   </div>
 
@@ -40,13 +41,15 @@
       class="po-md-3"
       name="salario"
       [(ngModel)]="vaga.salary"
-      p-label="Salário">
+      p-label="Salário"
+      p-placeholder="R$ 0,00">
     </po-input>
     <po-input
       class="po-md-3"
       name="localizacao"
       [(ngModel)]="vaga.location"
-      p-label="Localização">
+      p-label="Localização"
+      p-placeholder="Ex: Florianópolis - Santa Catarina">
     </po-input>
   </div>
 
@@ -55,13 +58,15 @@
       class="po-md-3"
       name="status"
       [p-options]="statusOptions"
-      p-label="Status">
+      p-label="Status da Vaga"
+      p-placeholder="Status">
     </po-combo>
     <po-combo
       class="po-md-3"
       name="modalidade"
       [p-options]="workModeOptions"
-      p-label="Modalidade">
+      p-label="Modalidade"
+      p-placeholder="Modalidade">
     </po-combo>
   </div>
 
@@ -70,13 +75,15 @@
       class="po-md-3"
       name="tipoContrato"
       [p-options]="contractTypeOptions"
-      p-label="Tipo de Contrato">
+      p-label="Tipo de Contrato"
+      p-placeholder="Contrato">
     </po-combo>
     <po-combo
       class="po-md-3"
       name="nivelSenioridade"
       [p-options]="seniorityLevelOptions"
-      p-label="Senioridade">
+      p-label="Senioridade"
+      p-placeholder="Nível de Senioridade">
     </po-combo>
   </div>
 

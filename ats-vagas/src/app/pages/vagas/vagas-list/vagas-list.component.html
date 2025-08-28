@@ -8,11 +8,10 @@
       [p-columns]="columns"
       [p-items]="filteredVagas"
       [p-actions]="tableActions"
-      (p-show-more)="loadMoreVagas.bind(this)"
-      (p-hide-load-more)="!hasNextPage">
+      (p-show-more)="loadMoreVagas()">
     </po-table>
 
     <po-loading-overlay *ngIf="isLoading"></po-loading-overlay>
-  </div>
 
+  </div>
 </po-page-list>

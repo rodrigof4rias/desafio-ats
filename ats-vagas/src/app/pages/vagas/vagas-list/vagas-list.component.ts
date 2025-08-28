@@ -1,18 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { PoPageModule, PoTableModule, PoTableColumn, PoPageAction, PoTableAction, PoDialogService, PoNotificationService, PoLoadingModule, PoPageFilter } from '@po-ui/ng-components';
+import {
+  PoPageModule,
+  PoTableModule,
+  PoTableColumn,
+  PoPageAction,
+  PoTableAction,
+  PoDialogService,
+  PoNotificationService,
+  PoLoadingModule,
+  PoPageFilter,
+  PoTagModule,
+ } from '@po-ui/ng-components';
 import { VagaService, Vaga } from '../../../services/vaga.service';
 import { finalize } from 'rxjs';
+import { StatusOptions, contractTypeOptions, seniorityLevelOptions, workModeOptions } from '../../../shared/vagas.enum'
 
 @Component({
   selector: 'app-vagas-list',
   standalone: true,
-  imports: [CommonModule, PoPageModule, PoTableModule, PoLoadingModule],
+  imports: [CommonModule, PoPageModule, PoTableModule, PoLoadingModule, PoTagModule ],
   templateUrl: './vagas-list.component.html',
   styleUrls: ['./vagas-list.component.scss']
 })
 export class VagasListComponent implements OnInit {
+
+  public StatusOptions = StatusOptions;
 
   vagas: Vaga[] = [];
   filteredVagas: Vaga[] = []; // lista para os itens filtrados
@@ -80,7 +94,40 @@ export class VagasListComponent implements OnInit {
   private setupPage(): void {
     this.columns = [
       { property: 'id', label: 'Código' },
-      { property: 'title', label: 'Cargo' }
+      { property: 'title', label: 'Cargo' },
+      { property: 'description', label: 'Descrição' },
+      { property: 'seniorityLevel', label: 'Senioridade',
+        type: 'label', labels: [
+          { value: 'JUNIOR', label: seniorityLevelOptions.JUNIOR },
+          { value: 'MID',    label: seniorityLevelOptions.MID },
+          { value: 'SENIOR', label: seniorityLevelOptions.SENIOR }
+        ]
+      },
+      { property: 'company', label: 'Empresa' },
+      { property: 'location', label: 'Local' },
+      { property: 'salary', label: 'Salário', type: 'currency', format: 'BRL' },
+      { property: 'workMode', label: 'Modalidade',
+        type: 'label',
+        labels: [
+          { value: 'REMOTE',  label: workModeOptions.REMOTO },
+          { value: 'HYBRID',  label: workModeOptions.HYBRID },
+          { value: 'ONSITE',  label: workModeOptions.ONSITE }
+        ]
+       },
+      { property: 'contractType', label: 'Tipo de Contrato',
+        type: 'label',
+        labels: [
+          { value: 'CLT',         label: contractTypeOptions.CLT },
+          { value: 'CONTRACTOR',  label: contractTypeOptions.CONTRACTOR },
+          { value: 'FREELANCER',  label: contractTypeOptions.FREELANCER }
+      ]
+       },
+      { property: 'status', label: 'Status', type: 'label',
+        labels: [
+          { value: 'OPEN',   label: StatusOptions.OPEN,   color: '#86c76aff' },
+          { value: 'CLOSED', label: StatusOptions.CLOSED, color: ' #d35454ff' }
+      ]
+       },
     ];
     this.pageActions = [
       { label: 'Nova Vaga', action: this.navegarParaNovaVaga.bind(this), icon: 'po-icon-plus' }
@@ -108,15 +155,24 @@ export class VagasListComponent implements OnInit {
   }
 
   private excluirVaga(vaga: Vaga): void {
-    this.dialogService.confirm({
-      title: 'Confirmar Exclusão',
-      message: `Você tem certeza que deseja excluir a vaga "${vaga.title}"?`,
-      confirm: () => {
-        this.vagaService.deleteVaga(vaga.id).subscribe(() => {
-          this.notification.success('Vaga excluída com sucesso!');
-          this.loadVagas(); // Recarrega a lista
-        });
-      }
-    });
+  const id = vaga.id;
+  if (id == null) {
+    this.notification.warning('Registro sem ID, não é possível excluir.');
+    return;
   }
+
+  this.dialogService.confirm({
+    title: 'Confirmar Exclusão',
+    message: `Você tem certeza que deseja excluir a vaga "${vaga.title}"?`,
+    confirm: () => {
+      this.vagaService.deleteVaga(id).subscribe({
+        next: () => {
+          this.notification.success('Vaga excluída com sucesso!');
+          this.loadVagas(); // recarrega a lista
+        },
+        error: () => this.notification.error('Erro ao excluir a vaga.')
+      });
+    }
+  });
+}
 }
