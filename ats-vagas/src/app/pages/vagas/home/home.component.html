@@ -1,0 +1,37 @@
+<po-page-default p-title="Bem-vindo ao Portal de Vagas ATS">
+  <div class="po-row">
+    <div class="po-md-12 po-lg-8 po-offset-lg-2 po-text-center">
+      <p class="po-font-text-large po-mb-2">
+        Gerencie suas oportunidades de forma simples e eficiente.
+      </p>
+      <p class="po-mb-4">
+        Utilize nosso sistema para cadastrar, editar e visualizar as vagas disponíveis. Comece agora mesmo acessando a área de cadastro.
+      </p>
+    </div>
+  </div>
+
+  <div class="po-row">
+    <!-- Widget para Vagas -->
+    <div class="po-md-6 po-lg-4 po-offset-lg-2">
+      <po-widget class="po-text-center">
+        <div class="po-font-title">Cadastro de Vagas</div>
+        <p class="po-mt-2 po-mb-3">
+          Acesse a lista de vagas, adicione novas oportunidades e gerencie as existentes.
+        </p>
+        <po-button p-label="Acessar Vagas" (p-click)="navigateToVagas()" p-kind="primary"></po-button>
+      </po-widget>
+    </div>
+
+    <!-- Widget para Relatórios -->
+    <div class="po-md-6 po-lg-4">
+       <po-widget class="po-text-center">
+        <div class="po-font-title">Relatórios</div>
+        <p class="po-mt-2 po-mb-3">
+          Visualize relatórios e dashboards sobre o status e a distribuição das suas vagas.
+        </p>
+        <!--  -->
+        <po-button p-label="Ver Relatórios" (p-click)="navigateToRelatorios()"></po-button>
+      </po-widget>
+    </div>
+  </div>
+</po-page-default>

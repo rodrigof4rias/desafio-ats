@@ -19,15 +19,15 @@ export interface Vaga {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root'
 })
 
 export class VagaService {
 
-  private apiUrl = 'http://localhost:3000/vagas';
-  createVaga: any;
+  private apiUrl = 'http://localhost:3000/vagas';
+  createVaga: any; // lembrar de tipar
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   private toNumberBR(value: unknown): number | null {
     if (value === null || value === undefined || value === '') return null;
@@ -42,16 +42,10 @@ export class VagaService {
     return Number.isNaN(n) ? null : n;
   }
 
-  // Mantivemos apenas esta versão, que suporta paginação
-  getVagas(page: number, pageSize: number): Observable<Vaga[]> {
-    const url = `${this.apiUrl}?_page=${page}&_limit=${pageSize}`;
-    return this.http.get<Vaga[]>(url);
-  }
-
-  getVagaById(id: number): Observable<Vaga> {
-    const url = `${this.apiUrl}/${id}`;
-    return this.http.get<Vaga>(url);
-  }
+  getVagas(page: number, pageSize: number): Observable<Vaga[]> {
+    const url = `${this.apiUrl}?_page=${page}&_limit=${pageSize}`;
+    return this.http.get<Vaga[]>(url);
+  }
 
   saveVaga(vaga: Vaga) {
   const { id, createdAt, updatedAt, ...rest } = vaga as any;
@@ -62,9 +56,13 @@ export class VagaService {
     : this.http.post<Vaga>(this.apiUrl, payload);
   }
 
+  getVagaById(id: number): Observable<Vaga> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.get<Vaga>(url);
+  }
 
-  deleteVaga(id: number): Observable<{}> {
-    const url = `${this.apiUrl}/${id}`;
-    return this.http.delete(url);
-  }
+  deleteVaga(id: number): Observable<{}> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.delete(url);
+  }
 }

@@ -1,0 +1,40 @@
+<po-page-default p-title="Relatório de Vagas">
+  <div *ngIf="isLoading; else content" class="po-text-center">
+    <po-loading-overlay p-text="Carregando dados..."></po-loading-overlay>
+  </div>
+
+  <ng-template #content>
+    <div class="po-row">
+      <div class="po-md-3">
+        <po-widget p-title="Total de Vagas">
+          <div class="po-font-display po-text-center">{{ totalVagas }}</div>
+        </po-widget>
+      </div>
+      <div class="po-md-3">
+        <po-widget p-title="Vagas Abertas">
+          <div class="po-font-display po-text-center">{{ vagasAbertas }}</div>
+        </po-widget>
+      </div>
+      <div class="po-md-3">
+        <po-widget p-title="Vagas Remotas">
+          <div class="po-font-display po-text-center">{{ vagasRemotas }}</div>
+        </po-widget>
+      </div>
+      <div class="po-md-3">
+        <po-widget p-title="Vagas CLT">
+          <div class="po-font-display po-text-center">{{ vagasCLT }}</div>
+        </po-widget>
+      </div>
+    </div>
+
+    <div class="po-row po-mt-4">
+      <div class="po-md-12">
+        <po-chart
+          p-title="Distribuição de Vagas por Status"
+          (p-type)="'pie'"
+          [p-series]="vagasPorStatusChart">
+        </po-chart>
+      </div>
+    </div>
+  </ng-template>
+</po-page-default>
