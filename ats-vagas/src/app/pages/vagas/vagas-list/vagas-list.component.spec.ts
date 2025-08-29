@@ -9,7 +9,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-// Mocks
+// mocks
 const vagaServiceMock = {
   getVagas: jasmine.createSpy('getVagas').and.returnValue(of([])),
   saveVaga: jasmine.createSpy('saveVaga').and.returnValue(of({})),
@@ -32,12 +32,10 @@ describe('VagasListComponent', () => {
         provideHttpClientTesting(),
         { provide: VagaService, useValue: vagaServiceMock },
         { provide: Router, useValue: routerMock },
-        // Não fornecemos o PoDialogService aqui, pois ele será sobrescrito
         { provide: PoNotificationService, useValue: notificationServiceMock }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
-    // CORREÇÃO DEFINITIVA: Força a substituição do PoDialogService real pelo nosso mock.
     .overrideProvider(PoDialogService, { useValue: dialogServiceMock })
     .compileComponents();
 
@@ -90,20 +88,20 @@ describe('VagasListComponent', () => {
   it('deve chamar deleteVaga quando o usuário confirma a exclusão', fakeAsync(() => {
       const vagaParaExcluir: Vaga = { id: 1, title: 'Vaga Teste', description: '', company: '', location: '', salary: null, status: 'OPEN', workMode: 'REMOTE', contractType: 'CLT', seniorityLevel: 'JUNIOR', requirements: '', createdAt: new Date(), updatedAt: new Date() };
 
-      // 1. Chama o método do componente
+      // chama o componente
       component['excluirVaga'](vagaParaExcluir);
 
-      // 2. Verifica se o diálogo de confirmação foi chamado
+      // verifica se confirmação foi chamado
       expect(dialogServiceMock.confirm).toHaveBeenCalled();
 
-      // 3. Captura a função de 'confirm' que foi passada para o diálogo
+      // Confirm que foi passada para o diálogo
       const confirmCallback = dialogServiceMock.confirm.calls.mostRecent().args[0].confirm;
 
-      // 4. Executa manualmente a função de confirmação (simulando o clique do usuário)
+      // executa manualmente a função de confirmação (simulando o clique do usuário)
       confirmCallback();
-      tick(); // Avança o tempo para resolver o subscribe dentro da função
+      tick(); // avança o tempo para resolver o subscribe dentro da função
 
-      // 5. Verifica os resultados
+      // verifica os resultados
       expect(vagaServiceMock.deleteVaga).toHaveBeenCalledWith(1);
       expect(notificationServiceMock.success).toHaveBeenCalledWith('Vaga excluída com sucesso!');
   }));

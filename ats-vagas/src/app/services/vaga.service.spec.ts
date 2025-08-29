@@ -11,9 +11,7 @@ describe('VagaService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      // O array 'imports' não é mais necessário para o HttpClient
       providers: [
-        // Adicione as novas funções provedoras aqui
         provideHttpClient(),
         provideHttpClientTesting(),
         VagaService
@@ -24,7 +22,7 @@ describe('VagaService', () => {
   });
 
   afterEach(() => {
-    httpMock.verify(); // Garante que não há requisições pendentes
+    httpMock.verify(); // garante que não há requisições pendentes
   });
 
   it('should be created', () => {
